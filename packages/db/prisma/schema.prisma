@@ -3,7 +3,9 @@
 // Full-text search (tsvector + GIN) and pg_trgm indexes live in the raw SQL migration `*_search_and_constraints`.
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  // rhel-openssl-3.0.x = the Linux runtime Vercel functions run on
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {

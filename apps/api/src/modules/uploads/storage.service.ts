@@ -52,7 +52,8 @@ export function detectMime(buf: Buffer): string | null {
 export class StorageService {
   private readonly log = new Logger(StorageService.name);
   readonly cloudinaryEnabled: boolean;
-  readonly localDir = resolve(process.cwd(), 'uploads');
+  // serverless filesystems are read-only except /tmp (uploads there are ephemeral — configure Cloudinary for real use)
+  readonly localDir = resolve(process.env.VERCEL ? '/tmp' : process.cwd(), 'uploads');
   private readonly publicUrl: string;
   private readonly cloudName?: string;
   private readonly apiKey?: string;
