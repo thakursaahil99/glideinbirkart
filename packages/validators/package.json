@@ -1,0 +1,36 @@
+{
+  "name": "@gk/validators",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Zod schemas shared by the API, web and mobile apps",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@gk/utils": "workspace:*",
+    "zod": "latest",
+    "@gk/types": "workspace:*"
+  },
+  "devDependencies": {
+    "@gk/config": "workspace:*",
+    "eslint": "^9.39.0",
+    "tsup": "latest",
+    "typescript": "~5.9.3",
+    "vitest": "latest"
+  }
+}

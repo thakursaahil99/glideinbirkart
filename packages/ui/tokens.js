@@ -1,0 +1,67 @@
+/**
+ * Glideinbir Kart design tokens.
+ * Colours are HSL triplets ("H S% L%") so they can be used as `hsl(var(--token) / <alpha>)`
+ * in Tailwind on the web and in NativeWind on mobile.
+ *
+ * Identity: ink-indigo primary, marigold accent, warm "paper" neutrals — a nod to Indian
+ * textiles and spice markets rather than the usual blue/white storefront.
+ */
+const light = {
+  background: '40 33% 98%',
+  foreground: '240 30% 11%',
+  card: '0 0% 100%',
+  'card-foreground': '240 30% 11%',
+  popover: '0 0% 100%',
+  'popover-foreground': '240 30% 11%',
+  primary: '248 62% 46%',
+  'primary-foreground': '0 0% 100%',
+  secondary: '248 45% 95%',
+  'secondary-foreground': '248 50% 28%',
+  muted: '40 22% 94%',
+  'muted-foreground': '240 8% 38%',
+  accent: '36 96% 54%',
+  'accent-foreground': '240 30% 11%',
+  destructive: '4 78% 50%',
+  'destructive-foreground': '0 0% 100%',
+  success: '152 62% 32%',
+  'success-foreground': '0 0% 100%',
+  warning: '38 92% 48%',
+  'warning-foreground': '240 30% 11%',
+  deal: '12 86% 54%',
+  'deal-foreground': '0 0% 100%',
+  border: '40 16% 88%',
+  input: '40 16% 86%',
+  ring: '248 62% 46%',
+};
+
+const dark = {
+  background: '240 24% 7%',
+  foreground: '40 25% 96%',
+  card: '240 22% 10%',
+  'card-foreground': '40 25% 96%',
+  popover: '240 22% 10%',
+  'popover-foreground': '40 25% 96%',
+  primary: '248 90% 70%',
+  'primary-foreground': '240 30% 10%',
+  secondary: '248 25% 17%',
+  'secondary-foreground': '248 80% 88%',
+  muted: '240 16% 15%',
+  'muted-foreground': '240 8% 66%',
+  accent: '36 94% 56%',
+  'accent-foreground': '240 30% 10%',
+  destructive: '4 80% 60%',
+  'destructive-foreground': '0 0% 100%',
+  success: '152 55% 46%',
+  'success-foreground': '240 30% 10%',
+  warning: '38 92% 56%',
+  'warning-foreground': '240 30% 10%',
+  deal: '12 90% 62%',
+  'deal-foreground': '240 30% 10%',
+  border: '240 14% 19%',
+  input: '240 14% 22%',
+  ring: '248 90% 70%',
+};
+
+const radius = { base: 12 };
+
+module.exports = { light, dark, radius };

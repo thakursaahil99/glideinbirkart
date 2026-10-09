@@ -1,0 +1,29 @@
+{
+  "name": "@gk/ui",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Glideinbir Kart design tokens, Tailwind preset and theme CSS shared by web and mobile",
+  "main": "./tokens.js",
+  "types": "./tokens.d.ts",
+  "exports": {
+    "./tokens": {
+      "types": "./tokens.d.ts",
+      "default": "./tokens.js"
+    },
+    "./preset": "./preset.js",
+    "./theme.css": "./theme.css",
+    "./package.json": "./package.json",
+    "./theme-utils": {
+      "types": "./theme-utils.d.ts",
+      "default": "./theme-utils.js"
+    }
+  },
+  "files": [
+    "tokens.js",
+    "tokens.d.ts",
+    "preset.js",
+    "theme.css",
+    "theme-utils.js",
+    "theme-utils.d.ts"
+  ]
+}

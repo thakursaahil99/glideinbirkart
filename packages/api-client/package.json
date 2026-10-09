@@ -1,0 +1,40 @@
+{
+  "name": "@gk/api-client",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Typed fetch client for the Glideinbir Kart API plus TanStack Query hooks (web + mobile)",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@gk/types": "workspace:*",
+    "@gk/validators": "workspace:*"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": ">=5",
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@gk/config": "workspace:*",
+    "@tanstack/react-query": "latest",
+    "@types/react": "latest",
+    "eslint": "^9.39.0",
+    "react": "latest",
+    "tsup": "latest",
+    "typescript": "~5.9.3"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "name": "@gk/db",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Prisma schema, migrations, client and seed script",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "prisma generate && tsup",
+    "dev": "tsup --watch",
+    "generate": "prisma generate",
+    "migrate": "prisma migrate dev",
+    "deploy": "prisma migrate deploy",
+    "reset": "prisma migrate reset --force",
+    "studio": "prisma studio",
+    "seed": "tsx src/seed/index.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "images": "tsx src/seed/images.ts",
+    "images:curated": "tsx src/seed/images-curated.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3"
+  },
+  "devDependencies": {
+    "@gk/config": "workspace:*",
+    "@gk/utils": "workspace:*",
+    "@types/node": "^22.0.0",
+    "argon2": "latest",
+    "eslint": "^9.39.0",
+    "prisma": "^6.19.3",
+    "tsup": "latest",
+    "tsx": "latest",
+    "typescript": "~5.9.3",
+    "ioredis": "^5.11.1"
+  }
+}
