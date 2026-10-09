@@ -1,0 +1,147 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 22
+  TURBO_TELEMETRY_DISABLED: 1
+  NEXT_TELEMETRY_DISABLED: 1
+  # Throwaway secrets for CI only
+  JWT_ACCESS_SECRET: ci-access-secret-glideinbir-kart-0123456789abcdef
+  SESSION_SECRET: ci-session-secret-glideinbir-kart-0123456789abcdef
+
+jobs:
+  quality:
+    name: Lint, typecheck and unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm turbo run lint
+      - name: Typecheck (API, web, mobile, packages)
+        run: pnpm turbo run typecheck
+      - name: Unit tests (utils, validators, API)
+        run: pnpm turbo run test
+
+  api-e2e:
+    name: API e2e (Supertest)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: glideinbir_kart_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+      redis:
+        image: redis:7
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/glideinbir_kart_test?schema=public
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/glideinbir_kart_test?schema=public
+      REDIS_URL: redis://localhost:6379
+      TEST_REDIS_URL: redis://localhost:6379/1
+      CORS_ORIGINS: http://localhost:3000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm turbo run build --filter=@gk/db...
+      - name: Migrate and seed the test database
+        run: |
+          pnpm --filter @gk/db deploy
+          pnpm --filter @gk/db seed
+      - name: Run e2e suite
+        run: pnpm --filter @gk/api test:e2e
+
+  web-e2e:
+    name: Web e2e (Playwright)
+    runs-on: ubuntu-latest
+    needs: quality
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: glideinbir_kart
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+      redis:
+        image: redis:7
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/glideinbir_kart?schema=public
+      REDIS_URL: redis://localhost:6379
+      CORS_ORIGINS: http://localhost:3000
+      WEB_URL: http://localhost:3000
+      API_URL: http://localhost:4000
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_API_ORIGIN: http://localhost:4000
+      E2E_BASE_URL: http://localhost:3000
+      E2E_START_SERVERS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @gk/db deploy
+      - run: pnpm --filter @gk/db seed
+      - name: Build API and web
+        run: pnpm turbo run build --filter=@gk/api --filter=@gk/web
+      - run: pnpm --filter @gk/web exec playwright install --with-deps chromium
+      - name: Run Playwright
+        run: pnpm --filter @gk/web test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            apps/web/playwright-report
+            apps/web/test-results
+          retention-days: 7
+
+  mobile-bundle:
+    name: Mobile bundle (Expo export)
+    runs-on: ubuntu-latest
+    needs: quality
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm turbo run build --filter=@gk/api-client...
+      - name: Export Android bundle (proves Metro + NativeWind compile)
+        run: pnpm --filter @gk/mobile exec expo export --platform android --output-dir dist
+        env:
+          CI: '1'
+          EXPO_NO_TELEMETRY: '1'

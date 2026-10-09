@@ -1,0 +1,49 @@
+{
+  "name": "glideinbir-kart",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Glideinbir Kart — multi-vendor e-commerce platform for India (web, API, mobile)",
+  "packageManager": "pnpm@12.10.1",
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "dev": "turbo run dev --filter=!@gk/mobile",
+    "dev:web": "turbo run dev --filter=@gk/web --filter=@gk/api",
+    "dev:api": "turbo run dev --filter=@gk/api",
+    "dev:mobile": "pnpm --filter @gk/mobile start",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:e2e": "pnpm --filter @gk/api test:e2e",
+    "test:web": "pnpm --filter @gk/web test:e2e",
+    "db:generate": "pnpm --filter @gk/db generate",
+    "db:migrate": "pnpm --filter @gk/db migrate",
+    "db:deploy": "pnpm --filter @gk/db deploy",
+    "db:seed": "pnpm --filter @gk/db seed",
+    "db:reset": "pnpm --filter @gk/db reset",
+    "db:studio": "pnpm --filter @gk/db studio",
+    "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,md,css}\" --ignore-path .gitignore",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,mjs,json,md,css}\" --ignore-path .gitignore",
+    "prepare": "husky || true",
+    "db:images": "pnpm --filter @gk/db images"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,mjs}": [
+      "prettier --write"
+    ],
+    "*.{json,md,css}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "latest",
+    "@commitlint/config-conventional": "latest",
+    "husky": "latest",
+    "lint-staged": "latest",
+    "prettier": "latest",
+    "turbo": "latest",
+    "typescript": "~5.9.3"
+  }
+}
