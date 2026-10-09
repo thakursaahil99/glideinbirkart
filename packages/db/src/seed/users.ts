@@ -3,21 +3,28 @@ import type { PrismaClient } from '@prisma/client';
 import { slugify } from '@gk/utils';
 import { bannerImageUrl, cities, daysAgo, indianNames } from './util';
 
+/** Demo accounts. Set SEED_PASSWORD to give them all one private password (use this for any public deployment). */
+const pw = (fallback: string) => process.env.SEED_PASSWORD ?? fallback;
+
 export const CREDENTIALS = {
-  superAdmin: { email: 'superadmin@glideinbirkart.in', password: 'Super@12345' },
-  admin: { email: 'admin@glideinbirkart.in', password: 'Admin@12345' },
-  customer: { email: 'customer@glideinbirkart.in', password: 'Customer@123', phone: '9876543210' },
+  superAdmin: { email: 'superadmin@glideinbirkart.in', password: pw('Super@12345') },
+  admin: { email: 'admin@glideinbirkart.in', password: pw('Admin@12345') },
+  customer: {
+    email: 'customer@glideinbirkart.in',
+    password: pw('Customer@123'),
+    phone: '9876543210',
+  },
   sellers: [
-    { email: 'seller1@glideinbirkart.in', password: 'Seller@12345', store: 'TechNest Retail' },
-    { email: 'seller2@glideinbirkart.in', password: 'Seller@12345', store: 'Fashion Bazaar' },
-    { email: 'seller3@glideinbirkart.in', password: 'Seller@12345', store: 'HomeCraft India' },
+    { email: 'seller1@glideinbirkart.in', password: pw('Seller@12345'), store: 'TechNest Retail' },
+    { email: 'seller2@glideinbirkart.in', password: pw('Seller@12345'), store: 'Fashion Bazaar' },
+    { email: 'seller3@glideinbirkart.in', password: pw('Seller@12345'), store: 'HomeCraft India' },
   ],
   pendingSeller: {
     email: 'seller.pending@glideinbirkart.in',
-    password: 'Seller@12345',
+    password: pw('Seller@12345'),
     store: 'Spice Route Organics',
   },
-  blocked: { email: 'blocked.user@example.com', password: 'Customer@123' },
+  blocked: { email: 'blocked.user@example.com', password: pw('Customer@123') },
 };
 
 interface SellerDef {

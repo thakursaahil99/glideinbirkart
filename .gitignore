@@ -18,3 +18,7 @@ test-results
 android
 ios
 next-env.d.ts
+.vercel
+
+.vercel
+.env*
