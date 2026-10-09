@@ -201,11 +201,12 @@ export class NotificationsService {
       sound: 'default',
       channelId: 'default',
     }));
-    const res = await fetch('https://exp.host/--/api/v2/push/send', {
+    // typed by hand: Vercel's separate TypeScript pass resolves the global fetch Response without its members
+    const res = (await fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(messages),
-    });
+    })) as unknown as { ok: boolean; status: number; json(): Promise<unknown> };
     if (!res.ok) throw new Error(`Expo push failed with HTTP ${res.status}`);
     const json = (await res.json()) as {
       data?: Array<{ status: string; details?: { error?: string } }>;
