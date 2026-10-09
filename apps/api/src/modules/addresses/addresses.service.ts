@@ -48,6 +48,8 @@ export class AddressesService {
       throw badRequest('ADDRESS_LIMIT', `You can save up to ${MAX_ADDRESSES} addresses`);
     const created = await this.repo.create(userId, {
       ...input,
+      // validated upstream; spelled out because zod infers every key as optional when TS runs without strict mode
+      phone: String(input.phone),
       line2: input.line2 || null,
       landmark: input.landmark || null,
       isDefault: count === 0 ? true : input.isDefault,
