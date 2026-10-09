@@ -1,0 +1,12 @@
+{
+  "extends": "@gk/config/tsconfig/nest.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "rootDir": "./src",
+    "types": ["node", "jest", "multer"],
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "test", "**/*.spec.ts"]
+}
